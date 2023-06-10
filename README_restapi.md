@@ -8,28 +8,28 @@ So far I'd assume you are running caikit-huggingface-demo (don't need the fronte
 
 ## Step 2: venv and requirements
 
-Do this once and then only for new requirements.
+Use the same venv as you would for the server (fastapi and uvicorn were added).
 
-### TODO: Get a better handle on requirements here
+* Update your venv if needed
 
 ```shell
-cd caikit_huggingface_demo
-python3 -m venv venv_rest
-pip install -r requirements_rest.txt
+python3 -m venv venv
+source venv_rest/bin/activate
+pip install -r requirements.txt
 ```
 
 ## Step 3: Fire it up
 
 ```shell
-cd caikit_huggingface_demo
 source venv_rest/bin/activate
+cd caikit_huggingface_demo
 ./restapi.py
 ```
 
 ## Browse
 
-Swagger: http://127.0.0.1:5000/docs
-ReDoc: http://127.0.0.1:5000/redoc
+* Swagger: http://127.0.0.1:5000/docs
+* ReDoc: http://127.0.0.1:5000/redoc
 
 > Watch to for Todo and future because a lot of this is "needs impl"
 
@@ -38,3 +38,4 @@ Try:
 * Object detection (w/ a URL to an image that isn't too big)
 * Image classification (w/ a URL to an image that isn't too big)
 * more coming soon
+* Parameterized endpoints make sense but for now I'm showing the models that I expect to work. Model+Task need to work together.

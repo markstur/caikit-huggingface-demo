@@ -9,3 +9,7 @@ transformers[torch]==4.27.4
 # frontend only
 gradio==3.29.0
 grpcio==1.53.0
+# rest api server
+uvicorn==0.22.0
+fastapi==0.96.0
+

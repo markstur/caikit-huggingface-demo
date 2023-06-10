@@ -60,18 +60,9 @@ if __name__ != "__main__":
     # Here we are discovering and adding to swagger for all tasks/models.
     # This is nice to see the models available, but TBD.  That could just be a path param.
     #
-    route_path = "/pipeline/{task:str}/model/{model:str}"
-    lam = lambda task, model, name: f"Hey there {name} {model} {task}"  # Echo for testing
-    lam.__name__ = "TODO: Route for future generic any task handler"
-    router.add_api_route(path=route_path, methods=["POST", "GET"], endpoint=lam)
-    route_path = "/models/{model}"
-    endpoint = lambda model, name: {"result": f"Hey there {name} {model}"}  # Echo for testing
-    endpoint.__name__ = "TODO: route for any model"
-    router.add_api_route(path=route_path, methods=["POST", "GET"], endpoint=endpoint, response_description="your results may vary")
-
     for method_name, method_descriptor in methods.items():
 
-        print(method_descriptor.output_type.full_name)
+        # print(method_descriptor.output_type.full_name)
 
         task, _, _ = method_name.rpartition("TaskPredict")
         if hasattr(client_stub, method_name):
@@ -101,11 +92,20 @@ if __name__ != "__main__":
                 endpoint = getattr(grpcer, task)
             else:
                 endpoint = grpcer.ToDo
+
             route_path = f"/pipeline/{task}/model/caikit/{model}"
             router.add_api_route(path=route_path, endpoint=endpoint)
             route_path = f"/models/caikit/{model}"
             router.add_api_route(path=route_path, endpoint=endpoint)
 
+    route_path = "/pipeline/{task:str}/model/{model:str}"
+    lam = lambda task, model, name: f"Hey there {name} {model} {task}"  # Echo for testing
+    lam.__name__ = "TODO: Route for future generic any task handler"
+    router.add_api_route(path=route_path, methods=["POST", "GET"], endpoint=lam)
+    route_path = "/models/{model}"
+    endpoint = lambda model, name: {"result": f"Hey there {name} {model}"}  # Echo for testing
+    endpoint.__name__ = "TODO: route for any model"
+    router.add_api_route(path=route_path, methods=["POST", "GET"], endpoint=endpoint, response_description="your results may vary")
 
     app.include_router(router)
 

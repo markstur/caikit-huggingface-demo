@@ -1,11 +1,19 @@
 import os
+from typing import List
 
+from pydantic import BaseModel
 import grpc
+
 from caikit import get_config
 from caikit.core import ModuleConfig
 from caikit.runtime.service_factory import ServicePackageFactory
 from google.protobuf.descriptor_pool import DescriptorPool
 from grpc_reflection.v1alpha.proto_reflection_descriptor_database import ProtoReflectionDescriptorDatabase
+
+
+class ClassResult(BaseModel):
+    class_name: str
+    confidence: float
 
 
 class Grpcer:
@@ -52,13 +60,11 @@ class Grpcer:
         )
         return {x.class_name: x.confidence for x in response.classes}
 
-    def Sentiment(self, text_in: str):
-        predict = client_stub.SentimentPredict
-        request = inference_service.messages.SentimentRequest
-        response = predict(
-            request(text_in=text_in), metadata=[("mm-model-id", self.model)]
+    def Sentiment(self, text_in: str) -> List[ClassResult]:
+        response = self.predict(
+            self.request(text_in=text_in), metadata=[("mm-model-id", self.model)]
         )
-        return {"classes": [{"class_name": x.class_name, "confidence": x.confidence} for x in response.classes]}
+        return [ClassResult(class_name=x.class_name, confidence=x.confidence) for x in response.classes]
 
     # def Sample(self, name: str) -> SampleOutputType:
     def Sample(self, name: str):
